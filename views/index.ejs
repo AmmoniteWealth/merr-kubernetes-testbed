@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Redis test app</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+
+  <body>
+    <h1 data-position="header">Testing Redis Cache</h1>
+
+    <section data-position="add-quote">
+      <h2>Add user</h2>
+
+      <form action="/adduser" method="POST">
+        <input type="text" placeholder="first name" name="fname" />
+        <input type="text" placeholder="last name" name="lname" />
+        <input type="text" placeholder="role" name="role" />
+        <input type="text" placeholder="age" name="age" />
+        <button type="submit">Submit</button>
+      </form>
+    </section>
+
+    <section data-position="update-quote">
+      <div>
+        <h2>Edit user</h2>
+        <p>
+          Edit an existing user by specifying their surname.
+        </p>
+        <form action="/edituser" method="POST">
+          <input type="text" placeholder="last name" name="chosen_lname" />
+          <input type="text" placeholder="new first name" name="new_fname" />
+          <input type="text" placeholder="new last name" name="new_lname" />
+          <input type="text" placeholder="new role" name="new_role" />
+          <input type="text" placeholder="new age" name="new_age" />
+          <button id="update-button">Edit user</button>
+        </form>
+      </div>
+    </section>
+
+    <section data-position="delete-quote">
+      <div>
+        <h2>Delete user</h2>
+        <p>
+          Delete user by specifying their surname.
+        </p>
+        <form action="/deleteuser" method="POST">
+          <input type="text" placeholder="last name" name="del_lname" />
+          <button id="delete-button">Delete User</button>
+        </form>
+      </div>
+    </section>
+
+    <section data-position="get-quotes">
+      <div>
+        <h2>Get user info</h2>
+        <p>
+          Search for an user and get their information.
+        </p>
+        <form action="/searchuser" method="POST">
+          <input type="text" placeholder="last name" name="search_lname" id="search_lname" />
+          <button id="search-button">Get User</button>
+        </form>
+      </div>
+      <br></br>
+      <div>
+        <h2>Empty Cache</h2>
+        <p>
+          To empty cache please press below:
+        </p>
+        <form action="/emptycache" method="POST">
+          <button id="empty-button">Empty Cache</button>
+        </form>
+      </div>
+    </section>
+
+    <section data-position="quotes">
+      <h2>Console</h2>
+
+      <ul class="quotes">
+        <% for(var i = 0; i < users.length; i++) {%>
+        <li class="quote">
+          <span><%= users[i].fname %></span>
+          <span><%= users[i].lname %></span>:
+          <ul>
+            <li> Role:
+          <span><%= users[i].role %></span>
+        </li>
+        <li> Age:
+          <span><%= users[i].age %></span>
+        </li>
+        </ul>
+        </li>
+        <% } %>
+      </ul>
+    </section>
+
+  </body>
+</html>
