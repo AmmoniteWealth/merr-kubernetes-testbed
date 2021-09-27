@@ -4,11 +4,15 @@ import "./editUser.css";
 
 function EditUser() {
   const [fname, setFname] = useState();
+  const [fnameNew, setFnameNew] = useState();
   const [lname, setLname] = useState();
+  const [lnameNew, setLnameNew] = useState();
   const [role, setRole] = useState();
+  const [roleNew, setRoleNew] = useState();
   const [age, setAge] = useState();
+  const [ageNew, setAgeNew] = useState();
   const [users, setUsers] = useState([]);
-  const [uidToEdit, setUidToEdit] = useState();
+  const [uidToEdit, setUidToEdit] = useState([]);
 
   const getAllUsers = () => {
     console.log("GETTING ALL USERS");
@@ -52,6 +56,7 @@ function EditUser() {
       .then((res) => res.text())
       .then((res) => {
         console.log("GOT THIS USER", JSON.parse(res));
+        return JSON.parse(res);
       });
   };
 
@@ -74,13 +79,35 @@ function EditUser() {
         break;
       case "uidToEdit":
         getUser(value);
+        setUidToEdit(value);
+        break;
+      case "fnameNew":
+        EditUser({
+          uid: uidToEdit,
+          user: {
+            fname: value,
+            lname: lnameNew,
+            role: roleNew,
+            age: ageNew,
+          },
+        });
+        setFnameNew(value);
+        break;
+      case "lnameNew":
+        setLnameNew(value);
+        break;
+      case "roleNew":
+        setRoleNew(value);
+        break;
+      case "ageNew":
+        setAgeNew(value);
         break;
     }
   };
 
   useEffect(() => {
     getAllUsers();
-  }, [fname, lname, role, age, uidToEdit]);
+  }, [fname, lname, role, age, uidToEdit, fnameNew, lnameNew, roleNew, ageNew]);
 
   return (
     <div className="App">
@@ -135,47 +162,39 @@ function EditUser() {
               handleAmendUserField(event, "uidToEdit", event.target.value)
             }
           />
-          <input type="text" placeholder="last name" name="chosen_lname" />
-          <input type="text" placeholder="new first name" name="new_fname" />
-          <input type="text" placeholder="new last name" name="new_lname" />
-          <input type="text" placeholder="new role" name="new_role" />
-          <input type="text" placeholder="new age" name="new_age" />
+          <input
+            type="text"
+            placeholder="first name"
+            value={fnameNew}
+            onChange={(event) =>
+              handleAmendUserField(event, "fnameNew", event.target.value)
+            }
+          />
+          <input
+            type="text"
+            placeholder="last name"
+            value={lnameNew}
+            onChange={(event) =>
+              handleAmendUserField(event, "lnameNew", event.target.value)
+            }
+          />
+          <input
+            type="text"
+            placeholder="role"
+            value={roleNew}
+            onChange={(event) =>
+              handleAmendUserField(event, "roleNew", event.target.value)
+            }
+          />
+          <input
+            type="text"
+            placeholder="age"
+            value={ageNew}
+            onChange={(event) =>
+              handleAmendUserField(event, "ageNew", event.target.value)
+            }
+          />
           <button id="update-button">Edit user</button>
-        </div>
-      </section>
-
-      <section data-position="delete-quote">
-        <div>
-          <h2>Delete user</h2>
-          <p>Delete user by specifying their surname.</p>
-          <form action="/deleteuser" method="POST">
-            <input type="text" placeholder="last name" name="del_lname" />
-            <button id="delete-button">Delete User</button>
-          </form>
-        </div>
-      </section>
-
-      <section data-position="get-quotes">
-        <div>
-          <h2>Get user info</h2>
-          <p>Search for an user and get their information.</p>
-          <form action="/searchuser" method="POST">
-            <input
-              type="text"
-              placeholder="last name"
-              name="search_lname"
-              id="search_lname"
-            />
-            <button id="search-button">Get User</button>
-          </form>
-        </div>
-        <br></br>
-        <div>
-          <h2>Empty Cache</h2>
-          <p>To empty cache please press below:</p>
-          <form action="/emptycache" method="POST">
-            <button id="empty-button">Empty Cache</button>
-          </form>
         </div>
       </section>
 
