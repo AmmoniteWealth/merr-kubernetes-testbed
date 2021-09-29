@@ -1,0 +1,9 @@
+apiVersion: atlas.mongodb.com/v1
+kind: AtlasProject
+metadata:
+  name: Deployment-test
+spec:
+  name: Deployment-test
+  projectIpAccessList:
+    - ipAddress: "0.0.0.0/0"
+      comment: "Allowing access to database from everywhere (only for Demo!)"

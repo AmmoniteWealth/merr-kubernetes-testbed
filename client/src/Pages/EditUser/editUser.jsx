@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 
 import "./editUser.css";
 
@@ -59,49 +59,64 @@ function EditUser() {
         return JSON.parse(res);
       });
   };
+  const editUser = (user) => {
+    console.log("Editing user", user);
+    fetch("http://localhost:8080/edituser", {
+      method: "post",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(user),
+    })
+      .then((res) => res.text())
+      .then((res) => {
+        console.log("GOT THIS USER", JSON.parse(res));
+        return JSON.parse(res);
+      });
+  };
 
   const handleAmendUserField = (event, field, value) => {
+    console.log("CHANGING FNAME", field, value);
     if (event !== undefined) {
       event.preventDefault();
-    }
-    switch (field) {
-      case "fname":
-        setFname(value);
-        break;
-      case "lname":
-        setLname(value);
-        break;
-      case "role":
-        setRole(value);
-        break;
-      case "age":
-        setAge(value);
-        break;
-      case "uidToEdit":
-        getUser(value);
-        setUidToEdit(value);
-        break;
-      case "fnameNew":
-        EditUser({
-          uid: uidToEdit,
-          user: {
-            fname: value,
-            lname: lnameNew,
-            role: roleNew,
-            age: ageNew,
-          },
-        });
-        setFnameNew(value);
-        break;
-      case "lnameNew":
-        setLnameNew(value);
-        break;
-      case "roleNew":
-        setRoleNew(value);
-        break;
-      case "ageNew":
-        setAgeNew(value);
-        break;
+      switch (field) {
+        case "fname":
+          console.log("CHANGING FNAME");
+          setFname(value);
+          break;
+        case "lname":
+          setLname(value);
+          break;
+        case "role":
+          setRole(value);
+          break;
+        case "age":
+          setAge(value);
+          break;
+        case "uidToEdit":
+          getUser(value);
+          setUidToEdit(value);
+          break;
+        case "fnameNew":
+          if (uidToEdit && uidToEdit.length > 0) {
+            editUser({
+              uid: uidToEdit,
+              fname: value,
+              lname: lnameNew,
+              role: roleNew,
+              age: ageNew,
+            });
+          }
+          setFnameNew(value);
+          break;
+        case "lnameNew":
+          setLnameNew(value);
+          break;
+        case "roleNew":
+          setRoleNew(value);
+          break;
+        case "ageNew":
+          setAgeNew(value);
+          break;
+      }
     }
   };
 
@@ -194,7 +209,6 @@ function EditUser() {
               handleAmendUserField(event, "ageNew", event.target.value)
             }
           />
-          <button id="update-button">Edit user</button>
         </div>
       </section>
 

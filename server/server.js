@@ -8,7 +8,7 @@ const BSON = require("bson");
 var cors = require("cors");
 
 const connectionString =
-  "mongodb+srv://melanie:Meladyfresh1@cluster0.v4ets.mongodb.net/Deployment-test?retryWrites=true&w=majority";
+  "mongodb+srv://melanie:Meladyfresh1@Cluster0.peqtm.mongodb.net";
 const PORT = process.env.PORT || 8080;
 const REDIS_PORT = process.env.REDIS_PORT || 6379;
 
@@ -103,15 +103,16 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
     });
 
     app.post("/edituser", (req, res) => {
+      console.log("EDITING USER", req.body);
       usersCollection
         .findOneAndUpdate(
-          { _id: BSON.ObjectId(query) },
+          { _id: BSON.ObjectId(req.body.uid) },
           {
             $set: {
-              fname: req.body.user.fname,
-              lname: req.body.user.lname,
-              role: req.body.user.role,
-              age: req.body.user.age,
+              fname: req.body.fname,
+              lname: req.body.lname,
+              role: req.body.role,
+              age: req.body.age,
             },
           },
           {
