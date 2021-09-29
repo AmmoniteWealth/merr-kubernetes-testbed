@@ -20,9 +20,6 @@ kubectl get atlasclusters my-atlas-cluster -o=jsonpath='{.status.conditions[?(@.
 
 True
 
-kubectl create secret generic the-user-password \
---from-literal="password=P@@sword%"
-
 kubectl apply -f - mongo-k8s/mongo-atlas-user.yaml
 
 kubectl apply -f k8s
