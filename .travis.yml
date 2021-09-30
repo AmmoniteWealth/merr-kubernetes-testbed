@@ -24,6 +24,4 @@ script:
 
 deploy:
   provider: script
-  script: bash scripts/deploy.sh production
-    on:
-      branch: main
+  script: bash ./deploy.sh
