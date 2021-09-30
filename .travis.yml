@@ -14,7 +14,7 @@ before_install:
   - gcloud components update kubectl
   - gcloud auth activate-service-account --key-file service-account.json
   - gcloud config set project ammonite-k8s
-  - gcloud config set compute/zone europe-west2-b
+  - gcloud config set compute/zone us-central1-c
   - gcloud container clusters get-credentials k8s-example-cluster
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
   - docker build -t melanieammonite/react-test -f ./client/Dockerfile.dev ./client
