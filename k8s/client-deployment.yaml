@@ -14,6 +14,6 @@ spec:
     spec:
       containers:
         - name: client
-          image: melanieammonite/k8s-client
+          image: melanieammonite/k8s-client:latest
           ports:
             - containerPort: 3000
