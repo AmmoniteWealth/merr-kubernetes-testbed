@@ -10,7 +10,6 @@ spec:
   selector:
     matchLabels:
       app: client-deployment
-      component: web
   template:
     metadata:
       labels:
