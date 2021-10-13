@@ -4,14 +4,17 @@ metadata:
   name: client-deployment
   labels:
     app: client-deployment
+    component: web
 spec:
   replicas: 3
   selector:
     matchLabels:
+      app: client-deployment
       component: web
   template:
     metadata:
       labels:
+        app: client-deployment
         component: web
     spec:
       containers:
