@@ -1,16 +1,12 @@
-//to run npm run dev and make sure to run redis with the command redis-cli
-
 const express = require("express");
 const bodyParser = require("body-parser");
-const redis = require("redis");
 const MongoClient = require("mongodb").MongoClient;
 const BSON = require("bson");
 var cors = require("cors");
 
 const connectionString =
-  "mongodb+srv://melanie:Meladyfresh1@Cluster0.peqtm.mongodb.net";
-const PORT = process.env.PORT || 8080;
-const REDIS_PORT = process.env.REDIS_PORT || 6379;
+  "mongodb+srv://melanie:Meladyfresh1@cluster0.v4ets.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
+const PORT = 5000;
 
 const app = express();
 app.use(cors());
@@ -21,34 +17,18 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
 
     const db = client.db("test");
     const usersCollection = db.collection("users");
-    const redis_client = redis.createClient(REDIS_PORT);
-    let lname;
-
-    // app.set("view engine", "ejs");
 
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(bodyParser.json());
     app.use(express.static("public"));
 
     app.listen(PORT, function () {
-      console.log("listening on 8080");
+      console.log("listening on 5000");
     });
-
-    // Cache middleware
-    function cache(req, res, next) {
-      redis_client.get(lname, (err, data) => {
-        if (err) throw err;
-        if (data !== null) {
-          console.log("OK");
-          // res.render("index.ejs", { users: [JSON.parse(data)] });
-        } else {
-          next();
-        }
-      });
-    }
 
     //app.get(endpoint, callback) endpoint is the bit after the domain, callback what to do when endpoint matches the stated
     app.get("/", (req, res) => {
+      console.log("PROCESSING GET USERS REQUEST");
       usersCollection
         .find()
         .toArray()
@@ -56,39 +36,6 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
           res.json(results);
         })
         .catch((error) => console.error(error));
-    });
-
-    app.post("/searchuser", (req, res) => {
-      lname = req.body.search_lname;
-      // res.redirect("/getuser");
-    });
-
-    app.post("/emptycache", (req, res) => {
-      redis_client.flushall("ASYNC", (err, succeedded) => {
-        console.log("Cache emptied");
-      });
-      res.redirect("/");
-    });
-
-    app.post("/getuser", (req, res) => {
-      console.log("GET USER REQUEST", req.body);
-      if (true) {
-        const query = req.body.uid;
-
-        usersCollection
-          .findOne({ _id: BSON.ObjectId(query) })
-          .then((results) => {
-            console.log("RESULTS", results);
-            //add results to cache
-            redis_client.set(results.user.lname, JSON.stringify(results));
-            // //shows result to console
-            res.json(results);
-          })
-          .catch((error) => console.error(error));
-      } else {
-        res.redirect("/");
-      }
-      // })
       res.status(200);
     });
 
@@ -98,41 +45,7 @@ MongoClient.connect(connectionString, { useUnifiedTopology: true })
         .insertOne(req.body)
         .then((result) => {
           console.log("INSERTED USER RECORD");
-        })
-        .catch((error) => console.error(error));
-    });
-
-    app.post("/edituser", (req, res) => {
-      console.log("EDITING USER", req.body);
-      usersCollection
-        .findOneAndUpdate(
-          { _id: BSON.ObjectId(req.body.uid) },
-          {
-            $set: {
-              fname: req.body.fname,
-              lname: req.body.lname,
-              role: req.body.role,
-              age: req.body.age,
-            },
-          },
-          {
-            upsert: true,
-          }
-        )
-        .then((result) => {
-          res.redirect("/");
-        })
-        .catch((error) => console.error(error));
-    });
-
-    app.post("/deleteuser", (req, res) => {
-      usersCollection
-        .deleteOne({ lname: req.body.del_lname })
-        .then((result) => {
-          if (result.deletedCount === 0) {
-            console.log("No user found with that surname");
-          }
-          res.redirect("/");
+          res.status(200);
         })
         .catch((error) => console.error(error));
     });

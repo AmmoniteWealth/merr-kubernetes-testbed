@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: server-deployment
+  labels:
+    component: server
 spec:
   replicas: 3
   selector:
@@ -14,11 +16,6 @@ spec:
     spec:
       containers:
         - name: server
-          image: melanieammonite/k8s-server
+          image: melanieammonite/k8s-server:latest
           ports:
             - containerPort: 5000
-          env:
-            - name: REDIS_HOST
-              value: redis-cluster-ip-service
-            - name: REDIS_PORT
-              value: "6379"

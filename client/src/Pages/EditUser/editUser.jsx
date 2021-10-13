@@ -4,29 +4,25 @@ import "./editUser.css";
 
 function EditUser() {
   const [fname, setFname] = useState();
-  const [fnameNew, setFnameNew] = useState();
   const [lname, setLname] = useState();
-  const [lnameNew, setLnameNew] = useState();
   const [role, setRole] = useState();
-  const [roleNew, setRoleNew] = useState();
   const [age, setAge] = useState();
-  const [ageNew, setAgeNew] = useState();
   const [users, setUsers] = useState([]);
-  const [uidToEdit, setUidToEdit] = useState([]);
 
   const getAllUsers = () => {
     console.log("GETTING ALL USERS");
-    fetch("http://localhost:8080/")
+    fetch("http://mongo-express-service:5000")
       .then((res) => res.text())
       .then((res) => {
         console.log("RES", JSON.parse(res));
         return setUsers(JSON.parse(res));
-      });
+      })
+      .catch((err) => console.log(err));
   };
 
   const addUser = () => {
-    console.log("8080");
-    fetch("http://localhost:8080/adduser", {
+    console.log("5000");
+    fetch("https://mongo-express-service/adduser", {
       method: "post",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -44,42 +40,11 @@ function EditUser() {
       });
   };
 
-  const getUser = (uid) => {
-    console.log("Getting user", uid);
-    fetch("http://localhost:8080/getuser", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        uid: uid,
-      }),
-    })
-      .then((res) => res.text())
-      .then((res) => {
-        console.log("GOT THIS USER", JSON.parse(res));
-        return JSON.parse(res);
-      });
-  };
-  const editUser = (user) => {
-    console.log("Editing user", user);
-    fetch("http://localhost:8080/edituser", {
-      method: "post",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(user),
-    })
-      .then((res) => res.text())
-      .then((res) => {
-        console.log("GOT THIS USER", JSON.parse(res));
-        return JSON.parse(res);
-      });
-  };
-
   const handleAmendUserField = (event, field, value) => {
-    console.log("CHANGING FNAME", field, value);
     if (event !== undefined) {
       event.preventDefault();
       switch (field) {
         case "fname":
-          console.log("CHANGING FNAME");
           setFname(value);
           break;
         case "lname":
@@ -91,38 +56,13 @@ function EditUser() {
         case "age":
           setAge(value);
           break;
-        case "uidToEdit":
-          getUser(value);
-          setUidToEdit(value);
-          break;
-        case "fnameNew":
-          if (uidToEdit && uidToEdit.length > 0) {
-            editUser({
-              uid: uidToEdit,
-              fname: value,
-              lname: lnameNew,
-              role: roleNew,
-              age: ageNew,
-            });
-          }
-          setFnameNew(value);
-          break;
-        case "lnameNew":
-          setLnameNew(value);
-          break;
-        case "roleNew":
-          setRoleNew(value);
-          break;
-        case "ageNew":
-          setAgeNew(value);
-          break;
       }
     }
   };
 
   useEffect(() => {
     getAllUsers();
-  }, [fname, lname, role, age, uidToEdit, fnameNew, lnameNew, roleNew, ageNew]);
+  }, [fname, lname, role, age]);
 
   return (
     <div className="App">
@@ -163,53 +103,6 @@ function EditUser() {
           }
         />
         <button onClick={() => addUser()}>Submit</button>
-      </section>
-
-      <section data-position="update-quote">
-        <div>
-          <h2>Edit user</h2>
-          <p>Edit an existing user by specifying their uid.</p>
-          <input
-            type="text"
-            placeholder="uid"
-            value={uidToEdit}
-            onChange={(event) =>
-              handleAmendUserField(event, "uidToEdit", event.target.value)
-            }
-          />
-          <input
-            type="text"
-            placeholder="first name"
-            value={fnameNew}
-            onChange={(event) =>
-              handleAmendUserField(event, "fnameNew", event.target.value)
-            }
-          />
-          <input
-            type="text"
-            placeholder="last name"
-            value={lnameNew}
-            onChange={(event) =>
-              handleAmendUserField(event, "lnameNew", event.target.value)
-            }
-          />
-          <input
-            type="text"
-            placeholder="role"
-            value={roleNew}
-            onChange={(event) =>
-              handleAmendUserField(event, "roleNew", event.target.value)
-            }
-          />
-          <input
-            type="text"
-            placeholder="age"
-            value={ageNew}
-            onChange={(event) =>
-              handleAmendUserField(event, "ageNew", event.target.value)
-            }
-          />
-        </div>
       </section>
 
       <section data-position="quotes">

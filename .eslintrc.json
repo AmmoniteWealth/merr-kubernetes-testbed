@@ -1,8 +1,7 @@
 {
-  "plugins": ["testing-library", "jest-dom"],
+  "plugins": ["testing-library"],
   "extends": [
     "plugin:testing-library/recommended",
-    "plugin:testing-library/react",
-    "plugin:jest-dom/recommended"
+    "plugin:testing-library/react"
   ]
 }

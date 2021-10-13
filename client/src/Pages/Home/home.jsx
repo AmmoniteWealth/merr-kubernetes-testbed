@@ -11,8 +11,6 @@ function Home() {
 
   return (
     <div className="App">
-      <input type="text" placeholder="name" name="name" />
-      <input type="text" placeholder="quote" name="quote" />
       <button onClick={() => navigateToEditUser()}>Edit User</button>
     </div>
   );
